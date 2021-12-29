@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <title>GU Weekly Event Stats</title>
+  </head>
+  <body>
+    
+    <div class="container">
+
+      <div class="jumbotron mt-5 pt-2 pb-4 bg-light text-center text-dark shadow">
+
+        <h1 class="display-4">GU Weekly Event Stats</h1>
+
+        <!-- cara menemukan user id -->
+        <p>
+          <a class="text-danger" data-toggle="collapse" href="#findUserIdInfo" role="button" aria-expanded="false" aria-controls="findUserIdInfo">
+            <u><b>Klik : Cara menemukan User ID GU?</b></u>
+          </a>
+
+          <div class="collapse" id="findUserIdInfo">
+            Log in ke <a href="https://apollo.gg/login" target="_blank">https://apollo.gg</a>, login menggunakan username/email dan password yang digunakan pada saat login di godsunchained.com, tidak perlu registrasi (user ID anda adalah angka setelah tanda pagar "#", dibawah username anda)<br>
+            -atau-<br>
+            Ketika anda sedang membuka godsunchained.com (dalam keadaan Log in), buka developer tools (chrome F12), buka tab Application, cari Session storage dan klik godsunchained.com kemudian akan ada entry 'user_id'.
+          </div>
+        </p>
+
+        <hr class="my-4">
+
+        <!-- form user id -->
+        <div class="input-group col-6 offset-3  p-0">
+
+          <input list="usersid" name="userid" id="userid" class="form-control" placeholder="Silahkan isikan User ID" aria-label="Silahkan isikan User ID" aria-describedby="submit_userid">
+
+          <datalist id="usersid">
+            <!-- dang -->
+            <option value="1626814">dangcrypt</option>
+            <option value="1357357">dutaselatan</option>
+            <option value="1683352">dayangsumbi</option>
+            <option value="1955736">metaversekite</option>
+            <option value="1953269">dblockchain</option>
+            <option value="1971862">futureclaim</option>
+            <!-- rikcy -->
+            <option value="1897012">RickyVox GU</option>
+            <option value="1967387">FulusBitcoin</option>
+            <option value="1942507">DuitEthereum</option>
+            <option value="1942656">TanciSamar</option>
+            <option value="1946378">PitisBlockchain</option>
+            <!-- dede -->
+            <option value="2009600">godsoftroll</option>
+            <option value="2071307">hairvest</option>
+            <option value="2056692">godofchaos</option>
+          </datalist>
+
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" id="userIdSubmitButton">Submit</button>
+          </div>
+
+        </div>
+
+        <div class="row mt-4">
+
+          <!-- tanggal dan waktu -->
+          <div class="col-lg-7 col-md-12">
+            <div class="table-responsive">
+                <!-- table tanggal -->
+                <table class="table table-sm table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center bg-dark text-light" colspan="2">Tanggal &amp; Waktu Event</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-right">Waktu Sekarang :</th>
+                            <td class="text-left" id="timeNowLocal">Now Local</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Event Dimulai :</td>
+                            <th class="text-left" id="eventStartLocal">Start Local</th>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Event Berakhir :</td>
+                            <th class="text-left" id="eventEndLocal">End Local</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+  
+          <!-- user info -->
+          <div class="col-lg-5 col-md-12">
+            <div class="table-responsive">
+                <!-- table info user -->
+                <table class="table table-sm table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center bg-dark text-light" colspan="2">User info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-right" style="width: 120px;">User ID :</th>
+                            <td class="text-left" id="userIdCol"> --- </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Username :</td>
+                            <th class="text-left"> <span id="userNameCol">---</span> <span class="badge badge-dark">Lvl.<span id="userLevelCol">---</span></span> </th>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Rank :</td>
+                            <th class="text-left" id="userRankCol"> --- </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- hasil match -->
+        <div id="result">
+
+          <div><h4 id="resultSummaryMessage" class="text-secondary" style="display: none;"></h4></div>
+  
+          <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="col-md-12 p-3 rounded-lg text-center text-primary border shadow">
+                <h3>Menang</h3>
+                <h3><span id="winsCount" class="badge badge-primary">..</span> / <span class="badge badge-dark">21</span>  </h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="col-md-12 p-3 rounded-lg text-center text-danger border shadow">
+                <h3>Kalah</h3>
+                <h3><span id="lossesCount" class="badge badge-danger">..</span></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="col-md-12 p-3 rounded-lg text-center text-info border shadow">
+                <h3>Total</h3>
+                <h3><span id="totalCount" class="badge badge-info">..</span> / <span class="badge badge-dark">60</span></h3>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="col-md-12 p-3 rounded-lg text-center text-success border shadow">
+                <h3>Musuh</h3>
+                <h3><span id="opponentsCount" class="badge badge-success">..</span> / <span class="badge badge-dark">51</span></h3>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    
+        <!-- table detai hasil match -->
+        <div id="resultDetailed" class="table-responsive">
+
+          <table class="table table-sm table-hover">
+
+            <thead>
+              <tr class="bg-dark text-light">
+                <th>No</th>
+                <th>T. Ronde</th>
+                <th>Waktu Mulai</th>
+                <th>Waktu Main</th>
+                <th>ID Musuh</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+    
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+    <script>
+    
+      // My Version
+
+      let dateTimenow = new Date();
+
+      //get the latest ranked weekend start/end
+      //set baseline date as a known ranked weekend start, 12/24 12:00:00:00 UTC
+      
+      // event start
+      let dateTimeEventOffset = ( 7 - 2 + new Date().getUTCDay() ) % 7;
+      let dateTimeEventStart = new Date();
+
+      dateTimeEventStart.setDate(
+        new Date().getDate() - dateTimeEventOffset
+      );
+
+      dateTimeEventStart.setUTCHours( 0, 0, 0, 0 );
+
+      let dateTimeEventStartEpoch = parseInt(
+        ( dateTimeEventStart.getTime() / 1000 ).toFixed(0)
+      );
+
+      //event end
+      let dateTimeEventEnd = new Date( dateTimeEventStart );
+      dateTimeEventEnd.setDate( dateTimeEventStart.getDate() + 6 );
+      dateTimeEventEnd.setUTCHours(23, 59, 0, 0);
+      let dateTimeEventEndEpoch = parseInt(
+        ( dateTimeEventEnd.getTime() / 1000 ).toFixed(0)
+      );
+
+
+      window.onload = function () {
+
+        // console.log( 'display last event date time start/finish' );
+        localDateTimeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour : 'numeric', minute: 'numeric', hour12: false };
+
+        $("#timeNowLocal").text( dateTimenow.toLocaleString("id-ID", localDateTimeOptions) );
+        $("#eventStartLocal").text( dateTimeEventStart.toLocaleString("id-ID", localDateTimeOptions) );
+        $("#eventEndLocal").text( dateTimeEventEnd.toLocaleString("id-ID", localDateTimeOptions) );
+
+        let userIdSubmitButton = $("#userIdSubmitButton");
+        let userIdInput = $("#userid");
+
+        let userId = localStorage.getItem("jemekite_gu_user_id");
+
+
+        function fetchUserPropAndRank(userId) {
+  
+          let userPropertiesUrl = 'https://api.godsunchained.com/v0/properties?user_id=' + userId;
+          let userRankUrl = 'https://api.godsunchained.com/v0/rank?user_id=' + userId;
+
+          $("#userIdCol").text( userId );
+
+          let rankTiers = {
+            1: "Tier 1- Rusted Bronze (B)",
+            2: "Tier 2 - Purified Bronze (B+)",
+            3: "Tier 3 - Rusted Iron (I)",
+            4: "Tier 4 - Purified Iron (I+)",
+            5: "Tier 5 - Impact Meteorite (M)",
+            6: "Tier 6 - Astral Meteorite (M+)",
+            7: "Tier 7 - Twilight Shadow (S)",
+            8: "Tier 8 - Midnight Shadow (S+)",
+            9: "Tier 9 - Auric Gold (G)",
+            10: "Tier 10 - Solar Gold (G+)",
+            11: "Tier 11 - Ethereal Diamond (D)",
+            12: "Tier 12 - Mythic (M)"
+          }
+
+          fetch(userPropertiesUrl)
+            .then(function (response) {
+              if (response.status !== 200) { return; }
+
+              response.json().then(function (data) {
+                var records = data.records;
+                if (records != null) {
+                  $("#userNameCol").text( records[0].username );
+                  $("#userLevelCol").text( records[0].xp_level );
+                }
+              });
+
+            })
+            .catch(function (err) {});
+
+          fetch(userRankUrl)
+            .then(function (response) {
+              if (response.status !== 200) {
+                return;
+              }
+              response.json().then(function (data) {
+                var records = data.records;
+                if (records != null) {
+                  $("#userRankCol").text( rankTiers[records[0].rank_level] );
+                }
+              });
+            })
+            .catch(function (err) {});
+
+            getUserWinLoseMatches(userId);
+
+        }
+        
+
+        userIdSubmitButton.on("click", function(){
+
+          let userIdInputValue = userIdInput.val();
+
+          if ( userIdInputValue == "" || /^\d+$/.test(userIdInputValue) != true ) {
+              alert(
+                "ISI YANG BENAR! user id teridiri dari angka.  Silahkan ulangi."
+              );
+              return;
+          } else {
+            // userIdSubmitButton.prop("disabled",true);
+
+            if (userId != null) {
+              localStorage.removeItem("jemekite_gu_user_id");
+            }
+            localStorage.setItem("jemekite_gu_user_id", userIdInputValue);
+            location.reload();
+          }
+
+        });
+
+
+        if (userId != null) {
+
+          fetchUserPropAndRank( userId );
+
+        } else { }
+
+
+        function getUserWinLoseMatches(userId) {
+
+          console.log( "Fetching data of user matches for user id : " + userId );
+
+          /**/
+          //get the ranked weekend wins and losses
+          var resultMessage = document.getElementById("resultSummaryMessage");
+          //start loading indicator
+          var loadingDotsTimer = setInterval(function () {
+            if (resultMessage.innerText == "") {
+              resultMessage.innerText = "Loading data";
+            } else {
+              resultMessage.innerText += ".";
+            }
+          }, 1000);
+          /**/
+
+          var winData = null,
+            loseData = null;
+
+          let page = 1;
+          let perPage = 1000;
+
+          let userWinUrl = "https://api.godsunchained.com/v0/match?page=" + page + "&perPage="+ perPage +"&player_won=" + userId + "&start_time=" + dateTimeEventStartEpoch + "-" + dateTimeEventEndEpoch;
+
+          let userLoseUrl = "https://api.godsunchained.com/v0/match?page=" + page + "&perPage="+ perPage +"&player_lost=" + userId + "&start_time=" + dateTimeEventStartEpoch + "-" + dateTimeEventEndEpoch;
+
+          // Fetch Wins
+          fetch(userWinUrl)
+            .then(function (response) {
+              if (response.status !== 200) {
+                resultMessage.innerHTML = "Gods Unchained API seems to be down.<br>" + response.status + ":" + response.statusText;
+                clearInterval(loadingDotsTimer);
+                return;
+              }
+
+              // Examine the text in the response
+              response.json().then(function (data) {
+                winData = data;
+                getRankedWeekendResults();
+              });
+            })
+            .catch(function (err) {
+              clearInterval(loadingDotsTimer);
+              // console.log("Fetch Error :-S", err);
+            });
+          
+          // Fetch Lose
+          fetch(userLoseUrl)
+            .then(function (response) {
+              if (response.status !== 200) {
+                resultMessage.innerHTML = "Gods Unchained API seems to be down.<br>" + response.status + ":" + response.statusText;
+                clearInterval(loadingDotsTimer);
+                return;
+              }
+
+              // Examine the text in the response
+              response.json().then(function (data) {
+                loseData = data;
+                getRankedWeekendResults();
+              });
+            })
+            .catch(function (err) {
+              clearInterval(loadingDotsTimer);
+              // console.log("Fetch Error :-S", err);
+            });
+
+
+        function getRankedWeekendResults(){
+
+          console.log( "running getRankedWeekendResults() function ... ");
+
+          clearInterval(loadingDotsTimer);
+
+          if (winData == null || loseData == null) { return; }
+
+          if ( winData.records == null && loseData.records == null ) {
+            resultMessage.innerHTML = "Tidak ada data...";
+            clearInterval(loadingDotsTimer);
+            return;
+          } else if ( winData.records != null && loseData.records == null ) {
+            loseData.records = [];
+          } else if ( winData.records == null && loseData.records != null ) {
+            winData.records = [];
+          }
+
+          //combine wins and losses
+          let results = winData.records.concat(loseData.records);
+          //sort the results
+          results.sort(function (a, b) {
+            return a.start_time - b.start_time;
+          });
+
+          //count wins and losses
+          var counter = 0
+            opponents = [],
+            winsCount = 0,
+            lossesCount = 0,
+            resultDetailedTbody = "",
+            opponentsCount = 0;
+          
+          for (let i = 0; i < results.length; i++) {
+
+            var element = results[i];
+
+            if (
+              element.end_time > dateTimeEventStartEpoch &&
+              element.end_time < dateTimeEventEndEpoch &&
+              element.game_mode === 13 &&
+              element.total_rounds  > 5
+              ) {
+
+              counter++;
+
+              var start_time = new Date(element.start_time * 1000).toLocaleString("id-ID", localDateTimeOptions);
+
+              if (element.player_won == userId) {
+
+                var trow = "<tr class=''><th class='border-right bg-primary text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_lost + "</td><td class='text-left border-left'> 😍<span class='badge badge-primary'>MENANG</span> </td></tr>";
+                resultDetailedTbody += trow;
+
+                opponents.push( element.player_lost );
+                winsCount++;
+              } else {
+
+                var trow = "<tr class=''><th class='border-right bg-danger text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_won + "</td><td class='text-left border-left'> 😭<span class='badge badge-danger'>KALAH</span> </td></tr>";
+                resultDetailedTbody += trow;
+
+                opponents.push( element.player_won );
+                lossesCount++;
+              }
+
+
+              if (/*counter == 25 ||*/ i + 1 == results.length) {
+
+                totalUniqueOpponents = new Set(opponents).size;
+
+                $("#winsCount").text(winsCount);
+                $("#lossesCount").text(lossesCount);
+                $("#totalCount").text(winsCount + lossesCount);
+                $("#opponentsCount").text(totalUniqueOpponents);
+                
+                $("#resultDetailed table tbody").html( resultDetailedTbody );
+
+                break;
+              }
+            }
+          }
+
+        }
+
+        }
+
+      
+
+      };
+
+    </script>
+
+  </body>
+</html>
