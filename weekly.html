@@ -19,6 +19,9 @@
           <a class="text-danger" data-toggle="collapse" href="#findUserIdInfo" role="button" aria-expanded="false" aria-controls="findUserIdInfo">
             <u><b>Klik : Cara menemukan User ID GU?</b></u>
           </a>
+          <a class="text-info" href="" id="gudecksLink" style="display:none;">
+            <u><b>&nbsp; | Klik : Check Gudecks</b></u>
+          </a>
 
           <div class="collapse" id="findUserIdInfo">
             Log in ke <a href="https://apollo.gg/login" target="_blank">https://apollo.gg</a>, login menggunakan username/email dan password yang digunakan pada saat login di godsunchained.com, tidak perlu registrasi (user ID anda adalah angka setelah tanda pagar "#", dibawah username anda)<br>
@@ -313,6 +316,7 @@
         if (userId != null) {
 
           fetchUserPropAndRank( userId );
+          $("#gudecksLink").attr("href", "https://gudecks.com/meta/player-stats?userId=" + userId).show();
 
         } else { }
 
