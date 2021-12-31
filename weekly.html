@@ -23,7 +23,7 @@
             <u><b>&nbsp; | Klik : Check Gudecks</b></u>
           </a>
 
-          <div class="collapse" id="findUserIdInfo">
+          <div class="collapse " id="findUserIdInfo">
             Log in ke <a href="https://apollo.gg/login" target="_blank">https://apollo.gg</a>, login menggunakan username/email dan password yang digunakan pada saat login di godsunchained.com, tidak perlu registrasi (user ID anda adalah angka setelah tanda pagar "#", dibawah username anda)<br>
             -atau-<br>
             Ketika anda sedang membuka godsunchained.com (dalam keadaan Log in), buka developer tools (chrome F12), buka tab Application, cari Session storage dan klik godsunchained.com kemudian akan ada entry 'user_id'.
@@ -38,21 +38,21 @@
           <input list="usersid" name="userid" id="userid" class="form-control" placeholder="Silahkan isikan User ID" aria-label="Silahkan isikan User ID" aria-describedby="submit_userid">
 
           <datalist id="usersid">
-            <option value="1626814">dangcrypt</option>
+            <option value="1626814">dangcrypt</option> <!-- L -->
             <option value="1357357">dutaselatan</option>
             <option value="1683352">dayangsumbi</option>
             <option value="1955736">metaversekite</option>
             <option value="1953269">dblockchain</option>
             <option value="1971862">futureclaim</option>
-            <option value="1897012">RickyVox GU</option>
+            <option value="1897012">RickyVox GU</option> <!-- R -->
             <option value="1967387">FulusBitcoin</option>
             <option value="1942507">DuitEthereum</option>
             <option value="1942656">TanciSamar</option>
             <option value="1946378">PitisBlockchain</option>
-            <option value="2009600">godsoftroll</option>
+            <option value="2009600">godsoftroll</option> <!-- D -->
             <option value="2071307">hairvest</option>
             <option value="2056692">godofchaos</option>
-            <option value="1667630">BungaKembang</option>
+            <option value="1667630">BungaKembang</option> <!-- N -->
             <option value="1764688">KucingBetina</option>
             <option value="1811405">NickyCrypto</option>
             <option value="1898400">LaptopSelmi</option>
@@ -162,7 +162,7 @@
         <!-- table detai hasil match -->
         <div id="resultDetailed" class="table-responsive">
 
-          <table class="table table-sm table-hover">
+          <table class="table table-sm table-hover" id="resultDetailedTable">
 
             <thead>
               <tr class="bg-dark text-light">
@@ -325,7 +325,7 @@
 
         function getUserWinLoseMatches(userId) {
 
-          console.log( "Fetching data of user matches for user id : " + userId );
+          // console.log( "Fetching data of user matches for user id : " + userId );
 
           /**/
           //get the ranked weekend wins and losses
@@ -362,6 +362,7 @@
               // Examine the text in the response
               response.json().then(function (data) {
                 winData = data;
+                // console.log( "winData.length = " + winData.records.length );
                 getRankedWeekendResults();
               });
             })
@@ -382,6 +383,7 @@
               // Examine the text in the response
               response.json().then(function (data) {
                 loseData = data;
+                // console.log( "loseData.length = " + loseData.records.length );
                 getRankedWeekendResults();
               });
             })
@@ -393,7 +395,7 @@
 
         function getRankedWeekendResults(){
 
-          console.log( "running getRankedWeekendResults() function ... ");
+          // console.log( "running getRankedWeekendResults() function ... ");
 
           clearInterval(loadingDotsTimer);
 
@@ -431,29 +433,47 @@
             if (
               element.end_time > dateTimeEventStartEpoch &&
               element.end_time < dateTimeEventEndEpoch &&
-              element.game_mode === 13 &&
-              element.total_rounds  > 5
+              element.game_mode === 13
               ) {
 
-              counter++;
+                var start_time = new Date(element.start_time * 1000).toLocaleString("id-ID", localDateTimeOptions);
+                
+                if ( element.total_rounds  >= 5 ) {
 
-              var start_time = new Date(element.start_time * 1000).toLocaleString("id-ID", localDateTimeOptions);
+                  counter++;
 
-              if (element.player_won == userId) {
+                  if (element.player_won == userId) {
 
-                var trow = "<tr class=''><th class='border-right bg-primary text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_lost + "</td><td class='text-left border-left'> 😍<span class='badge badge-primary'>MENANG</span> </td></tr>";
-                resultDetailedTbody += trow;
+                    var trow = "<tr class='table-primary'><th class='border-right bg-primary text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_lost + "</td><td class='text-left border-left'> 😍<span class='badge badge-primary'>MENANG</span> </td></tr>";
+                    resultDetailedTbody += trow;
 
-                opponents.push( element.player_lost );
-                winsCount++;
-              } else {
+                    opponents.push( element.player_lost );
+                    winsCount++;
 
-                var trow = "<tr class=''><th class='border-right bg-danger text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_won + "</td><td class='text-left border-left'> 😭<span class='badge badge-danger'>KALAH</span> </td></tr>";
-                resultDetailedTbody += trow;
+                  } else {
 
-                opponents.push( element.player_won );
-                lossesCount++;
-              }
+                    var trow = "<tr class='table-danger'><th class='border-right bg-danger text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_won + "</td><td class='text-left border-left'> 😭<span class='badge badge-danger'>KALAH</span> </td></tr>";
+                    resultDetailedTbody += trow;
+
+                    opponents.push( element.player_won );
+                    lossesCount++;
+
+                  }
+
+                } else {
+
+                  let skippedWInLose = (element.player_won == userId ? "WIN" : "LOSE");
+
+                  var trow = "<tr class='table-secondary'><th class='border-right bg-dark text-light'>" + counter + "</th><td>" + element.total_rounds + "</td><td>" + start_time + "</td><td>" + ( Math.floor( (element.end_time - element.start_time) /60 ) ) + " menit</td><td>" + element.player_won + "</td><td class='text-left border-left'> 😡<span class='badge badge-dark'>SKIP (" + skippedWInLose + ")</span> </td></tr>";
+                  resultDetailedTbody += trow;
+
+                }
+
+              
+
+              
+
+              
 
 
               if (/*counter == 25 ||*/ i + 1 == results.length) {
